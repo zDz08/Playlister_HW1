@@ -114,8 +114,15 @@ export default class PlaylisterView {
             itemDiv.id = "playlist-card-" + (i + 1);
 
             // PUT THE CONTENT INTO THE CARD
+            let itemNum = document.createTextNode(i+1 + ". ");
             let itemText = document.createTextNode(song.title + " by " + song.artist);
-            itemDiv.appendChild(itemText);
+            itemDiv.appendChild(itemNum);
+
+            // PUT THE HYPER LINK INTO THE CARD
+            let itemA = document.createElement("a");
+            itemA.href = "https://www.youtube.com/watch?v=" + song.youTubeId;
+            itemDiv.appendChild(itemA);
+            itemA.appendChild(itemText);
 
             // AND PUT THE CARD INTO THE UI
             itemsDiv.appendChild(itemDiv);
