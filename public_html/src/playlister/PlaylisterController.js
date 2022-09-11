@@ -51,6 +51,11 @@ export default class PlaylisterController {
             this.model.loadList(newList.id);
             this.model.saveLists();
         }
+        //HANDLER FOR ADD SONG BUTTON
+        document.getElementById("add-song-button").onmousedown = (event) => {
+            this.model.addNewSong("Untitled", "Unknown", "dQw4w9WgXcQ");
+        }
+
         // HANDLER FOR UNDO BUTTON
         document.getElementById("undo-button").onmousedown = (event) => {
             this.model.undo();

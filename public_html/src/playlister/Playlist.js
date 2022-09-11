@@ -27,6 +27,13 @@ export default class Playlist {
         this.songs[index] = song;
     }
 
+    addSong(initTitle, initArtist, initYouTubeId) {
+        this.songs.push({});
+        this.songs[this.songs.length-1].title = initTitle;
+        this.songs[this.songs.length-1].artist = initArtist;
+        this.songs[this.songs.length-1].youTubeId = initYouTubeId;
+    }
+
     setSongs(initSongs) {
         this.songs = initSongs;
     }

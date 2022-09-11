@@ -104,6 +104,15 @@ export default class PlaylisterModel {
         return newList;
     }
 
+    // ADD A NEW SONG
+    
+    addNewSong(initTitle, initArtist, initYouTubeId) {
+        if(this.hasCurrentList()) {
+            this.currentList.addSong(initTitle, initArtist, initYouTubeId);
+            this.view.refreshPlaylist(this.currentList);
+        }
+    }
+
     sortLists() {
         this.playlists.sort((listA, listB) => {
             if (listA.getName().toUpperCase() < listB.getName().toUpperCase()) {
