@@ -38,6 +38,7 @@ export default class PlaylisterModel {
 
         // THE MODAL IS NOT CURRENTLY OPEN
         this.confirmDialogOpen = false;
+        this.editDialogOpen = false;
     }
 
     // FOR MVC STUFF
@@ -88,6 +89,12 @@ export default class PlaylisterModel {
         this.confirmDialogOpen = !this.confirmDialogOpen;
         this.view.updateToolbarButtons(this);
         return this.confirmDialogOpen;
+    }
+
+    toggleEditDialogOpen() {
+        this.editDialogOpen = !this.editDialogOpen;
+        this.view.updateToolbarButtons(this);
+        return this.editDialogOpen;
     }
 
     // THESE ARE THE FUNCTIONS FOR MANAGING ALL THE LISTS
@@ -222,6 +229,26 @@ export default class PlaylisterModel {
             this.saveLists();
             this.view.updateStatusBar(this);
         }
+    }
+
+    editSong(title, artist, youTubeId, index) {
+        let targetSong = this.currentList.getSongAt(index);
+        if (title === "") {
+            targetSong.title = "Untitled";
+        } else {
+            targetSong.title = title;
+        }
+        if (artist === "") {
+            targetSong.artist = "Unknown";
+        } else {
+            targetSong.artist = artist;
+        }
+        if (youTubeId === "") {
+            targetSong.youTubeId = "dQw4w9WgXcQ";
+        } else {
+            targetSong.youTubeId = youTubeId;
+        }
+        this.view.refreshPlaylist(this.currentList);
     }
 
     deleteList(id) {

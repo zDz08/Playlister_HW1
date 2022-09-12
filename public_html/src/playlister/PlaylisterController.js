@@ -51,11 +51,10 @@ export default class PlaylisterController {
             this.model.loadList(newList.id);
             this.model.saveLists();
         }
-        //HANDLER FOR ADD SONG BUTTON
+        // HANDLER FOR ADD SONG BUTTON
         document.getElementById("add-song-button").onmousedown = (event) => {
             this.model.addNewSong("Untitled", "Unknown", "dQw4w9WgXcQ");
         }
-
         // HANDLER FOR UNDO BUTTON
         document.getElementById("undo-button").onmousedown = (event) => {
             this.model.undo();
@@ -107,6 +106,29 @@ export default class PlaylisterController {
             let deleteListModal = document.getElementById("delete-list-modal");
             deleteListModal.classList.remove("is-visible");
         }        
+    }
+
+    editModalHandlers(i) {
+        // RESPOND TO THE USER CONFIRMING TO EDIT A SONG
+        let editSongConfirmButton = document.getElementById("edit-song-confirm-button");
+        editSongConfirmButton.onclick = (event) => {
+            let titleInput = document.getElementById("song-input-1").value;
+            let artistInput = document.getElementById("song-input-2").value;
+            let youTubeIdInput = document.getElementById("song-input-3").value;
+            this.model.editSong(titleInput, artistInput, youTubeIdInput, i);
+            this.model.toggleEditDialogOpen();
+            this.model.refreshToolbar();
+            let editSongModal = document.getElementById("edit-song-modal");
+            editSongModal.classList.remove("is-visible");
+        }
+
+        // RESPOND TO THE USER CLOSING THE EDIT SONG MODAL
+        let editSongCancelButton = document.getElementById("edit-song-cancel-button");
+        editSongCancelButton.onclick = (event) => {
+            this.model.toggleEditDialogOpen();
+            let editSongModal = document.getElementById("edit-song-modal");
+            editSongModal.classList.remove("is-visible");
+        }
     }
 
     /*
@@ -205,6 +227,15 @@ export default class PlaylisterController {
             // GET THE CARD
             let card = document.getElementById("playlist-card-" + (i + 1));
             
+            // MAKE ALL THE SONGS EDITABLE
+            card.ondblclick = (event) => {
+                let editSongModal = document.getElementById("edit-song-modal");
+                editSongModal.classList.add("is-visible");
+                this.model.toggleEditDialogOpen();
+                this.model.refreshToolbar();
+                this.editModalHandlers(i);
+            }
+
             // NOW SETUP ALL CARD DRAGGING HANDLERS AS THE USER MAY WISH TO CHANGE
             // THE ORDER OF SONGS IN THE PLAYLIST
 

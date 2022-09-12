@@ -57,6 +57,15 @@
   font-size: 48pt;
 }
 
+.modal-edit-center {
+  display: grid;
+  grid-template-columns: 40% 55%;
+  grid-template-rows: 30% 30% 30%;
+  gap: 10px 20px;
+  font-size: 24pt;
+  font-weight: bold;
+}
+
 span {
   font-weight: bold;
   font-style: italic;

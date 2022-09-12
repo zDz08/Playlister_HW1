@@ -203,12 +203,18 @@ export default class PlaylisterView {
     */
     updateToolbarButtons(model) {
         let tps = model.tps;
-        if (model.confirmDialogOpen) {
+        if (model.confirmDialogOpen || model.editDialogOpen) {
             this.disableButton("add-list-button");
             this.disableButton("add-song-button");
             this.disableButton("undo-button");
             this.disableButton("redo-button");
             this.disableButton("close-button");
+        } else {
+            this.enableButton("add-list-button");
+            this.enableButton("add-song-button");
+            this.enableButton("undo-button");
+            this.enableButton("redo-button");
+            this.enableButton("close-button");
         }
     }
 
