@@ -105,7 +105,35 @@ export default class PlaylisterController {
             // CLOSE THE MODAL
             let deleteListModal = document.getElementById("delete-list-modal");
             deleteListModal.classList.remove("is-visible");
-        }        
+        }
+    }
+
+    deleteSongModalHandlers(i) {
+        // RESPOND TO THE USER CONFIRMING TO DELETE A SONG
+        let deleteSongConfirmButton = document.getElementById("delete-song-confirm-button");
+        deleteSongConfirmButton.onclick = (event) => {
+
+            // DELETE THE SONG, THIS IS NOT UNDOABLE
+            this.model.deleteSong(i);
+
+            // ALLOW OTHER INTERACTIONS
+            this.model.toggleConfirmDialogOpen();
+
+            // CLOSE THE MODAL
+            let deleteSongModal = document.getElementById("delete-song-modal");
+            deleteSongModal.classList.remove("is-visible");
+        }
+
+        // RESPOND TO THE USER CLOSING THE DELETE SONG MODAL
+        let deleteSongCancelButton = document.getElementById("delete-song-cancel-button");
+        deleteSongCancelButton.onclick = (event) => {
+            // ALLOW OTHER INTERACTIONS
+            this.model.toggleConfirmDialogOpen();
+            
+            // CLOSE THE MODAL
+            let deleteSongModal = document.getElementById("delete-song-modal");
+            deleteSongModal.classList.remove("is-visible");
+        }
     }
 
     editModalHandlers(i) {
@@ -234,6 +262,22 @@ export default class PlaylisterController {
                 this.model.toggleEditDialogOpen();
                 this.model.refreshToolbar();
                 this.editModalHandlers(i);
+            }
+
+            // HANDLES DELETING A SONG
+            document.getElementById("delete-song-" + (i+1)).onmousedown = (event) => {
+                this.ignoreParentClick(event);
+
+                let targetSong = this.model.getSong(i);
+                let deleteSongSpan = document.getElementById("delete-song-span");
+                deleteSongSpan.innerHTML = "";
+                deleteSongSpan.appendChild(document.createTextNode(targetSong.title));
+                let deleteSongModal = document.getElementById("delete-song-modal");
+
+            // OPEN UP THE DIALOG
+                deleteSongModal.classList.add("is-visible");
+                this.model.toggleConfirmDialogOpen();
+                this.deleteSongModalHandlers(i);
             }
 
             // NOW SETUP ALL CARD DRAGGING HANDLERS AS THE USER MAY WISH TO CHANGE

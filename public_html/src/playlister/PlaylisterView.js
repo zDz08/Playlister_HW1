@@ -115,7 +115,7 @@ export default class PlaylisterView {
             itemDiv.id = "playlist-card-" + (i + 1);
 
             // PUT THE CONTENT INTO THE CARD
-            let itemNum = document.createTextNode(i+1 + ". ");
+            let itemNum = document.createTextNode((i+1) + ". ");
             let itemText = document.createTextNode(song.title + " by " + song.artist);
             itemDiv.appendChild(itemNum);
 
@@ -125,7 +125,16 @@ export default class PlaylisterView {
             itemDiv.appendChild(itemA);
             itemA.appendChild(itemText);
 
+            // MAKE THE DELETE SONG BUTTON
+            let deleteSongButton = document.createElement("input");
+            deleteSongButton.setAttribute("type", "button");
+            deleteSongButton.setAttribute("id", "delete-song-" + (i+1));
+            deleteSongButton.setAttribute("class", "song-card-button");
+            deleteSongButton.setAttribute("value", "X");
+            deleteSongButton.setAttribute("style", "float: right;");
+
             // AND PUT THE CARD INTO THE UI
+            itemDiv.appendChild(deleteSongButton);
             itemsDiv.appendChild(itemDiv);
         }
         // NOW THAT THE CONTROLS EXIST WE CAN REGISTER EVENT

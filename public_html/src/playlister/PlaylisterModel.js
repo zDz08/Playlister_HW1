@@ -268,6 +268,13 @@ export default class PlaylisterModel {
         this.saveLists();
     }
 
+    deleteSong(i) {
+        let songToBeDeleted = this.getSong(i);
+        this.currentList.songs = this.currentList.songs.filter(song => song !== songToBeDeleted);
+        this.view.refreshPlaylist(this.currentList);
+        this.saveLists();
+    }
+
     // NEXT WE HAVE THE FUNCTIONS THAT ACTUALLY UPDATE THE LOADED LIST
 
     moveSong(fromIndex, toIndex) {
