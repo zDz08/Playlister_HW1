@@ -53,15 +53,17 @@ export default class PlaylisterController {
         }
         // HANDLER FOR ADD SONG BUTTON
         document.getElementById("add-song-button").onmousedown = (event) => {
-            this.model.addNewSong("Untitled", "Unknown", "dQw4w9WgXcQ");
+            this.model.addAddSongTransaction("Untitled", "Unknown", "dQw4w9WgXcQ");
         }
         // HANDLER FOR UNDO BUTTON
         document.getElementById("undo-button").onmousedown = (event) => {
             this.model.undo();
+            this.model.saveLists();
         }
         // HANDLER FOR REDO BUTTON
         document.getElementById("redo-button").onmousedown = (event) => {
             this.model.redo();
+            this.model.saveLists();
         }
         // HANDLER FOR CLOSE LIST BUTTON
         document.getElementById("close-button").onmousedown = (event) => {
@@ -114,7 +116,7 @@ export default class PlaylisterController {
         deleteSongConfirmButton.onclick = (event) => {
 
             // DELETE THE SONG, THIS IS NOT UNDOABLE
-            this.model.deleteSong(i);
+            this.model.addDeleteSongTransaction(i);
 
             // ALLOW OTHER INTERACTIONS
             this.model.toggleConfirmDialogOpen();
@@ -143,7 +145,8 @@ export default class PlaylisterController {
             let titleInput = document.getElementById("song-input-1").value;
             let artistInput = document.getElementById("song-input-2").value;
             let youTubeIdInput = document.getElementById("song-input-3").value;
-            this.model.editSong(titleInput, artistInput, youTubeIdInput, i);
+            let oldSong = this.model.getSong(i);
+            this.model.addEditSongTransaction(oldSong.title, oldSong.artist, oldSong.youTubeId, titleInput, artistInput, youTubeIdInput, i);
             this.model.toggleEditDialogOpen();
             this.model.refreshToolbar();
             let editSongModal = document.getElementById("edit-song-modal");

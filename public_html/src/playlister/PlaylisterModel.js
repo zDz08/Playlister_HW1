@@ -1,6 +1,9 @@
 import jsTPS from "../common/jsTPS.js";
 import Playlist from "./Playlist.js";
 import MoveSong_Transaction from "./transactions/MoveSong_Transaction.js";
+import AddSong_Transaction from "./transactions/AddSong_Transaction.js";
+import EditSong_Transaction from "./transactions/EditSong_Transaction.js";
+import DeleteSong_Transaction from "./transactions/DeleteSong_Transaction.js";
 
 /**
  * PlaylisterModel.js
@@ -115,8 +118,9 @@ export default class PlaylisterModel {
     
     addNewSong(initTitle, initArtist, initYouTubeId) {
         if(this.hasCurrentList()) {
-            this.currentList.addSong(initTitle, initArtist, initYouTubeId);
+            let newSong = this.currentList.addSong(initTitle, initArtist, initYouTubeId);
             this.view.refreshPlaylist(this.currentList);
+            this.saveLists();
         }
     }
 
@@ -287,6 +291,28 @@ export default class PlaylisterModel {
         this.saveLists();
     }
 
+    doSong(initTitle, initArtist, initYouTubeId, isDo) {
+        if (this.hasCurrentList()) {
+            if (isDo) {
+                this.addNewSong(initTitle, initArtist, initYouTubeId);
+            }else {
+                this.currentList.songs = this.currentList.songs.slice(0, this.currentList.songs.length-1);
+                this.view.refreshPlaylist(this.currentList);
+            }
+        }
+    }
+
+    doDeleteSong(i, title, artist, youTubeId, isDo) {
+        if (this.hasCurrentList()) {
+            if (isDo) {
+                this.deleteSong(i);
+            }else {
+                this.addNewSong(title, artist, youTubeId);
+                this.moveSong((this.currentList.songs.length-1), i);
+            }
+        }
+    }
+
     // SIMPLE UNDO/REDO FUNCTIONS, NOTE THESE USE TRANSACTIONS
 
     undo() {
@@ -308,6 +334,24 @@ export default class PlaylisterModel {
 
     addMoveSongTransaction(fromIndex, onIndex) {
         let transaction = new MoveSong_Transaction(this, fromIndex, onIndex);
+        this.tps.addTransaction(transaction);
+        this.view.updateToolbarButtons(this);
+    }
+
+    addAddSongTransaction(initTitle, initArtist, initYouTubeId) {
+        let transaction = new AddSong_Transaction(this, initTitle, initArtist, initYouTubeId);
+        this.tps.addTransaction(transaction);
+        this.view.updateToolbarButtons(this);
+    }
+
+    addEditSongTransaction(oldT, oldA, oldY, newT, newA, newY, i) {
+        let transaction = new EditSong_Transaction(this, oldT, oldA, oldY, newT, newA, newY, i);
+        this.tps.addTransaction(transaction);
+        this.view.updateToolbarButtons(this);
+    }
+
+    addDeleteSongTransaction(i) {
+        let transaction = new DeleteSong_Transaction(this, i);
         this.tps.addTransaction(transaction);
         this.view.updateToolbarButtons(this);
     }
