@@ -145,6 +145,7 @@ export default class PlaylisterController {
             // CLOSE THE MODAL
             let deleteSongModal = document.getElementById("delete-song-modal");
             deleteSongModal.classList.remove("is-visible");
+            this.model.redoOn();
         }
     }
 
@@ -170,6 +171,7 @@ export default class PlaylisterController {
             this.model.toggleEditDialogOpen();
             let editSongModal = document.getElementById("edit-song-modal");
             editSongModal.classList.remove("is-visible");
+            this.model.redoOn();
         }
     }
 
@@ -274,6 +276,9 @@ export default class PlaylisterController {
             // MAKE ALL THE SONGS EDITABLE
             card.ondblclick = (event) => {
                 let editSongModal = document.getElementById("edit-song-modal");
+                document.getElementById("song-input-1").value = this.model.getSong(i).title;
+                document.getElementById("song-input-2").value = this.model.getSong(i).artist;
+                document.getElementById("song-input-3").value = this.model.getSong(i).youTubeId;
                 editSongModal.classList.add("is-visible");
                 this.model.toggleEditDialogOpen();
                 this.model.refreshToolbar();
