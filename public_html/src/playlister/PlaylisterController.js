@@ -59,16 +59,25 @@ export default class PlaylisterController {
         document.getElementById("undo-button").onmousedown = (event) => {
             this.model.undo();
             this.model.saveLists();
+            if (!this.model.tps.hasTransactionToUndo()) {
+                this.model.undoOff();
+            }
+            this.model.redoOn();
         }
         // HANDLER FOR REDO BUTTON
         document.getElementById("redo-button").onmousedown = (event) => {
             this.model.redo();
             this.model.saveLists();
+            if (!this.model.tps.hasTransactionToRedo()) {
+                this.model.redoOff();
+            }
+            this.model.undoOn();
         }
         // HANDLER FOR CLOSE LIST BUTTON
         document.getElementById("close-button").onmousedown = (event) => {
             this.model.unselectAll();
             this.model.unselectCurrentList();
+            this.model.listLoaded(false);
         }
     }
 
@@ -124,6 +133,7 @@ export default class PlaylisterController {
             // CLOSE THE MODAL
             let deleteSongModal = document.getElementById("delete-song-modal");
             deleteSongModal.classList.remove("is-visible");
+            this.model.undoOn();
         }
 
         // RESPOND TO THE USER CLOSING THE DELETE SONG MODAL
@@ -151,6 +161,7 @@ export default class PlaylisterController {
             this.model.refreshToolbar();
             let editSongModal = document.getElementById("edit-song-modal");
             editSongModal.classList.remove("is-visible");
+            this.model.undoOn();
         }
 
         // RESPOND TO THE USER CLOSING THE EDIT SONG MODAL
@@ -181,6 +192,7 @@ export default class PlaylisterController {
 
             // GET THE SELECTED LIST
             this.model.loadList(id);
+            this.model.listLoaded(true);
         }
         // HANDLES DELETING A PLAYLIST
         document.getElementById("delete-list-" + id).onmousedown = (event) => {
@@ -224,6 +236,7 @@ export default class PlaylisterController {
             // SPECIFY HANDLERS FOR THE TEXT FIELD
             textInput.ondblclick = (event) => {
                 this.ignoreParentClick(event);
+                this.model.addListOff();
             }
             textInput.onkeydown = (event) => {
                 if (event.key === 'Enter') {

@@ -53,7 +53,40 @@ export default class PlaylisterModel {
     refreshToolbar() {
         this.view.updateToolbarButtons(this);
     }
+
+    addListOff() {
+        this.view.disableButton("add-list-button");
+    }
+
+    listLoaded(isLoad) {
+        if (isLoad) {
+            this.view.disableButton("add-list-button");
+            this.refreshToolbar();
+        } else {
+            this.view.enableButton("add-list-button");
+            this.view.disableButton("add-song-button");
+            this.view.disableButton("undo-button");
+            this.view.disableButton("redo-button");
+            this.view.disableButton("close-button");
+        }
+    }
     
+    undoOn(){
+        this.view.enableButton("undo-button");
+    }
+
+    undoOff() {
+        this.view.disableButton("undo-button");
+    }
+
+    redoOn(){
+        this.view.enableButton("redo-button");
+    }
+
+    redoOff(){
+        this.view.disableButton("redo-button");
+    }
+
     // FIRST WE HAVE THE ACCESSOR (get) AND MUTATOR (set) METHODS
     // THAT GET AND SET BASIC VALUES NEEDED FOR COORDINATING INTERACTIONS
     // AND DISPLAY
@@ -336,12 +369,14 @@ export default class PlaylisterModel {
         let transaction = new MoveSong_Transaction(this, fromIndex, onIndex);
         this.tps.addTransaction(transaction);
         this.view.updateToolbarButtons(this);
+        this.undoOn();
     }
 
     addAddSongTransaction(initTitle, initArtist, initYouTubeId) {
         let transaction = new AddSong_Transaction(this, initTitle, initArtist, initYouTubeId);
         this.tps.addTransaction(transaction);
         this.view.updateToolbarButtons(this);
+        this.undoOn();
     }
 
     addEditSongTransaction(oldT, oldA, oldY, newT, newA, newY, i) {
